@@ -3,16 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <title>Authorization Callback - Pine LLC</title>
-<style>body{font-family:Arial,sans-serif;max-width:600px;margin:80px auto;text-align:center;color:#333;padding:20px}
+<style>body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;text-align:center;color:#333;padding:20px}
 .success{background:#e8f5e9;border:1px solid #4caf50;border-radius:8px;padding:30px;margin:20px 0}
-code{background:#f5f5f5;padding:4px 8px;border-radius:4px;font-size:14px;word-break:break-all}</style>
+.code-box{background:#1a1a2e;color:#0f0;padding:15px;border-radius:8px;font-family:monospace;font-size:13px;word-break:break-all;text-align:left;margin:15px 0;max-height:200px;overflow-y:auto}
+.label{font-weight:bold;color:#4caf50;display:block;margin-bottom:5px;font-size:16px}
+button{background:#4caf50;color:#fff;border:none;padding:12px 24px;border-radius:6px;font-size:16px;cursor:pointer;margin:5px}
+button:hover{background:#388e3c}
+.copied{background:#388e3c !important}</style>
 </head>
 <body>
 <div class="success">
 <h1>Authorization Received!</h1>
-<p>Please copy the <strong>full URL</strong> from your browser's address bar and paste it into Claude.</p>
-<p>The URL contains your authorization code which Claude will use to complete the setup.</p>
+<span class="label">Authorization Code:</span>
+<div class="code-box" id="codeBox">Loading...</div>
+<button onclick="copyCode()">Copy Auth Code</button>
+<button onclick="copyFullUrl()">Copy Full URL</button>
+<br><br>
+<span class="label">Realm ID:</span>
+<div class="code-box" id="realmBox">Loading...</div>
+<span class="label">Full URL:</span>
+<div class="code-box" id="urlBox">Loading...</div>
 </div>
-<p><em>You can close this tab after copying the URL.</em></p>
+<p><em>Copy the auth code or full URL above and paste it into Claude.</em></p>
+<script>
+const params = new URLSearchParams(window.location.search);
+const code = params.get('code') || 'NOT FOUND';
+const realmId = params.get('realmId') || 'NOT FOUND';
+document.getElementById('codeBox').textContent = code;
+document.getElementById('realmBox').textContent = realmId;
+document.getElementById('urlBox').textContent = window.location.href;
+function copyCode() {
+  navigator.clipboard.writeText(code).then(() => {
+    event.target.textContent = 'Copied!';
+    event.target.classList.add('copied');
+  });
+}
+function copyFullUrl() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    event.target.textContent = 'Copied!';
+    event.target.classList.add('copied');
+  });
+}
+</script>
 </body>
 </html>
